@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 import {
@@ -8,12 +8,44 @@ import {
 } from "react-icons/ai";
 import { BsSearch, BsHeart } from "react-icons/bs";
 const Navbar = () => {
+  const [IsNavOpen, setIsNavOpen] = useState(false);
+
+  const HandleToggle = () => setIsNavOpen(!IsNavOpen);
+
   return (
     <nav className="w-full h-36">
       <div className="w-11/12 h-full flex justify-between items-center">
         <div className="flex justify-between items-center h-full">
           <div className="w-36 h-full bg-darkgray flex justify-center items-center">
-            <AiOutlineMenu className="text-white text-3xl cursor-pointer" />
+            {IsNavOpen ? (
+              <AiOutlineClose
+                onClick={HandleToggle}
+                className="text-white text-3xl cursor-pointer"
+              />
+            ) : (
+              <AiOutlineMenu
+                onClick={HandleToggle}
+                className="text-white text-3xl cursor-pointer"
+              />
+            )}
+
+            <nav
+              style={
+                IsNavOpen
+                  ? { transform: " scaleY(1)" }
+                  : { transform: "scaleY(0)" }
+              }
+              className="absolute w-full left-0 bg-darkgray z-50 text-sm mt-96 transition-transform	 "
+            >
+              <ul className="block list-none m-0 p-0 relative z-10">
+                <NavLink Active Name="Home" To="/" />
+                <NavLink Name="About Us" To="/about" />
+                <NavLink Name="Product Collection" To="/collection" />
+                <NavLink Name="Cart" To="/cart" />
+                <NavLink Name="Checkout" To="/checkout" />
+                <NavLink Name="Contact Us" To="/contact" />
+              </ul>
+            </nav>
           </div>
           <div className="pl-12">
             <Link href="/">
@@ -58,3 +90,18 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const NavLink = ({ Name, To, Active }) => {
+  return (
+    <li className="block">
+      <Link className="cursor-pointer" href={To}>
+        <p
+          style={Active && { background: "rgb(85, 89, 92)" }}
+          className=" font-medium py-3 px-5 leading-5 flex items-center cursor-pointer text-white hover:bg-gray-600"
+        >
+          {Name}
+        </p>
+      </Link>
+    </li>
+  );
+};
