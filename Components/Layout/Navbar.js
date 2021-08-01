@@ -7,10 +7,15 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { BsSearch, BsHeart } from "react-icons/bs";
+import { useSelector } from "react-redux";
+
+import { selectUser } from "../../Redux/Features/UserSlice";
 const Navbar = () => {
   const [IsNavOpen, setIsNavOpen] = useState(false);
 
   const HandleToggle = () => setIsNavOpen(!IsNavOpen);
+
+  const user = useSelector(selectUser);
 
   return (
     <nav className="w-full h-36">
@@ -77,11 +82,19 @@ const Navbar = () => {
             </div>
           </div>
           <div className="ml-8">
-            <Link href="/login">
-              <p className="text-base font-semibold tracking-wider text-white py-3 px-8 bg-darkgray cursor-pointer hover:bg-black">
-                Login
-              </p>
-            </Link>
+            {user.isLoggedIn ? (
+              <Link href="/profile">
+                <p className="text-base font-semibold tracking-wider text-white py-3 px-8 bg-darkgray cursor-pointer hover:bg-black">
+                  Profile
+                </p>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <p className="text-base font-semibold tracking-wider text-white py-3 px-8 bg-darkgray cursor-pointer hover:bg-black">
+                  Login
+                </p>
+              </Link>
+            )}
           </div>
         </div>
       </div>

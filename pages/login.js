@@ -1,6 +1,41 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import Layout from "../Components/Layout/Layout";
+import { LOGIN, selectUser } from "../Redux/Features/UserSlice";
+
 const login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const HandleLogin = async (data) => {
+    const res = await axios.post(`http://localhost:8000/api/signin`, {
+      ...data,
+    });
+    console.log(res.data.user);
+    if (res.status === 200) {
+      dispatch(
+        LOGIN({
+          isLoggedIn: true,
+          userId: res.data.user._id,
+          name: res.data.user.name,
+          email: res.data.user.email,
+          token: res.data.user.token,
+          role: res.data.user.role,
+        })
+      );
+      router.push("/");
+    }
+  };
+
   return (
     <Layout>
       <section
@@ -19,15 +54,18 @@ const login = () => {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center w-11/12 h-full py-2">
+          <form
+            onSubmit={handleSubmit(HandleLogin)}
+            className="flex flex-col justify-center items-center w-11/12 h-full py-2"
+          >
             <div className="w-full">
               <label className="text-sm text-gray-500 py-1">Email Id</label>
               <input
                 className="w-full bg-gray-100 h-full px-4"
                 type="email"
-                name=""
-                id=""
+                {...register("email", { required: true })}
               />
+              {errors.email?.type === "required" && "Email is required"}
             </div>
             <div className="w-full my-8">
               <label className="text-sm text-gray-500 py-1 px-4">
@@ -36,16 +74,18 @@ const login = () => {
               <input
                 className="w-full bg-gray-100 h-full px-4"
                 type="password"
-                name=""
-                id=""
+                {...register("password", { required: true })}
               />
             </div>
             <div className="flex justify-start items-center w-full mt-4">
-              <button className="w-40 h-10 bg-green-500 text-white">
+              <button
+                type="submit"
+                className="w-40 h-10 bg-green-500 text-white"
+              >
                 Sign In
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     </Layout>
