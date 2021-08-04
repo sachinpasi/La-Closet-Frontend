@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    console.log(user);
+
     if (JSON.parse(user)) dispatch(LOGIN(JSON.parse(user)));
   }, []);
 

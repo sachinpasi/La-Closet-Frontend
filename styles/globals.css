@@ -6,6 +6,7 @@
 
 * {
   font-family: "Poppins", sans-serif;
+  outline: none;
 }
 body {
   background-color: #f6f7fb;
@@ -26,4 +27,34 @@ a {
 .customContainer {
   width: calc(100vw - 300px);
   margin: 0 auto;
+}
+
+.customfileUpload {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+
+  height: 40px;
+  font-size: 18px;
+  line-height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 5px;
+  float: left;
+
+  padding: 0 1rem;
+}
+
+input[type="file"] {
+  z-index: 999;
+  line-height: 0;
+  position: absolute;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  left: -154px;
+  cursor: pointer;
 }

@@ -81,13 +81,24 @@ const Navbar = () => {
               </p>
             </div>
           </div>
-          <div className="ml-8">
+          <div className="ml-8 flex">
             {user.isLoggedIn ? (
-              <Link href="/profile">
-                <p className="text-base font-semibold tracking-wider text-white py-3 px-8 bg-darkgray cursor-pointer hover:bg-black">
-                  Profile
-                </p>
-              </Link>
+              <>
+                {user.role === 1 && (
+                  <Link href="/adminDashboard">
+                    <p className="text-base font-semibold tracking-wider text-white py-3 px-8 mx-1 bg-darkgray cursor-pointer hover:bg-black">
+                      Admin
+                      <span className="ml-1">Dashboard</span>
+                    </p>
+                  </Link>
+                )}
+
+                <Link href="/profile">
+                  <p className="text-base font-semibold tracking-wider text-white py-3 mx-1 px-8 bg-darkgray cursor-pointer hover:bg-black">
+                    Profile
+                  </p>
+                </Link>
+              </>
             ) : (
               <Link href="/login">
                 <p className="text-base font-semibold tracking-wider text-white py-3 px-8 bg-darkgray cursor-pointer hover:bg-black">
