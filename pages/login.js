@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Layout from "../Components/Layout/Layout";
 import { LOGIN, selectUser } from "../Redux/Features/UserSlice";
+import { API } from "../API/API";
 
 const login = () => {
   const {
@@ -17,7 +18,7 @@ const login = () => {
   const router = useRouter();
 
   const HandleLogin = async (data) => {
-    const res = await axios.post(`http://localhost:8000/api/signin`, {
+    const res = await axios.post(`${API}/signin`, {
       ...data,
     });
     console.log(res.data.user);

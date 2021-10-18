@@ -8,8 +8,11 @@ import { selectUser } from "../../Redux/Features/UserSlice";
 import { API } from "../../API/API";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import Compressor from "compressorjs";
+import { useRouter } from "next/router";
 
 const createProduct = () => {
+  const router = useRouter();
   const user = useSelector(selectUser);
   const [Categories, setCategories] = useState([]);
 
@@ -33,7 +36,12 @@ const createProduct = () => {
     formData.append("description", description);
     formData.append("category", category);
     formData.append("stock", stock);
-    formData.append("photo", photo[0]);
+    new Compressor(photo[0], {
+      quality: 0.8,
+      success: (res) => {
+        formData.append("photo", res);
+      },
+    });
 
     try {
       const res = await axios.post(
@@ -43,8 +51,9 @@ const createProduct = () => {
           headers: { Authorization: `Bearer ${user?.token}` },
         }
       );
-      console.log(res);
+
       if (res.status === 200) {
+        router.push("/adminDashboard/products");
         return toast.success("Product Added Successfully");
       }
     } catch (error) {

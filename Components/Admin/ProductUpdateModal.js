@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { API } from "../../API/API";
 import { selectUser } from "../../Redux/Features/UserSlice";
 import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const ProductUpdateModal = ({
   ProductId,
@@ -38,12 +39,24 @@ const ProductUpdateModal = ({
     console.log(data);
     const { name, price, description, category, stock, photo } = data;
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("stock", stock);
-    formData.append("photo", photo[0]);
+    if (name) {
+      formData.append("name", name);
+    }
+    if (price) {
+      formData.append("price", price);
+    }
+    if (description) {
+      formData.append("description", description);
+    }
+    if (category) {
+      formData.append("category", category);
+    }
+    if (stock) {
+      formData.append("stock", stock);
+    }
+    if (photo?.length !== 0) {
+      formData.append("photo", photo[0]);
+    }
 
     try {
       const res = await axios.put(
@@ -55,6 +68,7 @@ const ProductUpdateModal = ({
       );
       console.log(res);
       if (res.status === 200) {
+        setisProductUpdateModalOpen(!isProductUpdateModalOpen);
         return toast.success("Product Updated Successfully");
       }
     } catch (error) {
