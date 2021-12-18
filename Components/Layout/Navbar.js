@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
   AiOutlineMenu,
@@ -11,6 +12,7 @@ import { useSelector } from "react-redux";
 
 import { selectUser } from "../../Redux/Features/UserSlice";
 import CartSidebar from "./CartSidebar";
+import { selectReload } from "../../Redux/Features/ReloadSlice";
 const Navbar = () => {
   const [IsNavOpen, setIsNavOpen] = useState(false);
   const [IsCartSideBarOpen, setIsCartSideBarOpen] = useState(false);
@@ -19,6 +21,9 @@ const Navbar = () => {
   const HandleToggle = () => setIsNavOpen(!IsNavOpen);
 
   const user = useSelector(selectUser);
+  const reload = useSelector(selectReload);
+
+  const router = useRouter();
 
   const LoadCart = () => {
     if (typeof window !== undefined) {
@@ -30,7 +35,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setCartProducts(LoadCart());
-  }, []);
+  }, [reload]);
 
   return (
     <>
@@ -100,7 +105,7 @@ const Navbar = () => {
                   }}
                   className="absolute bg-black text-white w-5 h-5 flex justify-center items-center rounded-full"
                 >
-                  {CartProducts.length}
+                  {CartProducts?.length ? CartProducts?.length : 0}
                 </p>
               </div>
             </div>

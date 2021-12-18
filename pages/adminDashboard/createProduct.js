@@ -192,7 +192,7 @@ const createProduct = () => {
                 </p>
               </div>
             </Link>
-            <Link href="/">
+            <Link href="/dashboard/orders">
               <div className="bg-white w-full h-12 flex justify-start items-center px-4 cursor-pointer my-2">
                 <p className="text-lg font-semibold tracking-wider">
                   Manage Orders

@@ -9,8 +9,11 @@ import {
   selectCart,
 } from "../../../Redux/Features/CartSlice";
 import { useSelector } from "react-redux";
+import { SET_RELOAD } from "../../../Redux/Features/ReloadSlice";
 
 const Product = ({ Name, Price, Id, AllProducts }) => {
+  const dispatch = useDispatch();
+
   const AddProductToCart = (id) => {
     AllProducts?.forEach((item) => {
       if (item._id === id) {
@@ -19,8 +22,9 @@ const Product = ({ Name, Price, Id, AllProducts }) => {
           if (localStorage.getItem("cart")) {
             Cart = JSON.parse(localStorage.getItem("cart"));
           }
-          Cart.push({ ...item });
+          Cart.push({ ...item, count: 1 });
           localStorage.setItem("cart", JSON.stringify(Cart));
+          dispatch(SET_RELOAD());
         }
       }
     });

@@ -3,9 +3,17 @@ import { AiOutlineClose, AiOutlineShoppingCart } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
 import { API } from "../../API/API";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { selectReload, SET_RELOAD } from "../../Redux/Features/ReloadSlice";
 
 const CartSidebar = ({ IsCartSideBarOpen, setIsCartSideBarOpen }) => {
   const [CartProducts, setCartProducts] = useState([]);
+  const [GetReload, setGetReload] = useState(false);
+
+  const dispatch = useDispatch();
+  const reload = useSelector(selectReload);
+
   const LoadCart = () => {
     if (typeof window !== undefined) {
       if (localStorage.getItem("cart")) {
@@ -13,8 +21,6 @@ const CartSidebar = ({ IsCartSideBarOpen, setIsCartSideBarOpen }) => {
       }
     }
   };
-
-  console.log(CartProducts);
 
   const RemoveProductFromCart = (id) => {
     let Cart = [];
@@ -30,19 +36,21 @@ const CartSidebar = ({ IsCartSideBarOpen, setIsCartSideBarOpen }) => {
       });
       localStorage.setItem("cart", JSON.stringify(Cart));
     }
+    setGetReload(!GetReload);
+    dispatch(SET_RELOAD());
     return Cart;
   };
 
   useEffect(() => {
     setCartProducts(LoadCart());
-  }, [RemoveProductFromCart]);
+  }, [GetReload, reload]);
   return (
     <>
       <div
         onClick={() => setIsCartSideBarOpen(!IsCartSideBarOpen)}
         className={`${
           IsCartSideBarOpen ? "visible" : "hidden"
-        } bg-black bg-opacity-50 fixed z-10 left-0 right-0 top-0 bottom-0`}
+        } bg-black bg-opacity-50 fixed z-20 left-0 right-0 top-0 bottom-0`}
       ></div>
       <div
         style={{
@@ -102,13 +110,16 @@ const CartSidebar = ({ IsCartSideBarOpen, setIsCartSideBarOpen }) => {
             })}
           </div>
         </div>
-
-        <div className="w-full h-12 bg-gray-600 flex justify-center items-center cursor-pointer hover:bg-gray-700">
-          <h4 className="text-xl font-medium text-white capitalize ">
-            Proceed To Check Out
-          </h4>
-          <AiOutlineArrowRight className="text-2xl text-white ml-2" />
-        </div>
+        {CartProducts?.length > 0 && (
+          <Link href="/checkout">
+            <div className="w-full h-12 bg-gray-600 flex justify-center items-center cursor-pointer hover:bg-gray-700">
+              <h4 className="text-xl font-medium text-white capitalize ">
+                Proceed To Check Out
+              </h4>
+              <AiOutlineArrowRight className="text-2xl text-white ml-2" />
+            </div>
+          </Link>
+        )}
       </div>
     </>
   );
